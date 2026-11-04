@@ -1,0 +1,37 @@
+name: "update"
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: "write"
+
+jobs:
+  update:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7
+
+      - uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # v22
+        with:
+          # Keep upstream Nix; since v21 the action defaults to Determinate Nix.
+          determinate: false
+
+      - name: "Bump package.nix"
+        run: "scripts/update.sh"
+
+      # flake check evaluates every system; the build fetches the
+      # x86_64-linux binary and runs its version check.  A bad bump fails
+      # here instead of landing on main.
+      - name: "Build and commit"
+        run: |
+          git diff --quiet && exit 0
+          nix flake check --all-systems
+          nix build .#blacksmith-cli
+          version=$(sed -n 's/^  version = "\(.*\)";$/\1/p' package.nix)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: update blacksmith CLI to v$version"
+          git push
