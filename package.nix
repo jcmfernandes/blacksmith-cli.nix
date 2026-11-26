@@ -8,22 +8,22 @@
   rsync,
   openssh,
 }: let
-  version = "0.7.15";
+  version = "0.7.26";
 
   # Upstream publishes one static binary per platform, plus a .sha256
   # beside it; the hashes below are those files, converted to SRI.
   platforms = {
     x86_64-linux = {
       path = "linux/amd64";
-      hash = "sha256-bVSMCaSgJvC9TWwwyGvgZv7hyH8dXgSS3BcXxbb+c/E=";
+      hash = "sha256-ipRepLYctwhmYeJW4RgkU+1B4x6SXSgaeAzEMQT2fRg=";
     };
     aarch64-linux = {
       path = "linux/arm64";
-      hash = "sha256-Jovl5hy2lS7Pooo8LdWWQCGLG4tZUmap2BOHFErCaAQ=";
+      hash = "sha256-Ee9M8UdfLh2BA5gnAzQQXoNaiCRlMju+dxnP+cbsK5w=";
     };
     aarch64-darwin = {
       path = "darwin/arm64";
-      hash = "sha256-k5DE3InDdEsdHGXYwHIic7gArE62qQd8RTbnq5+KjQk=";
+      hash = "sha256-AlyUONez9U/5A6ajAnadJqCkOQ6AhfAY3FMOlPfjTIk=";
     };
   };
 
